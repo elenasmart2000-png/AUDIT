@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Результат аудита финансовой системы</title>
+  <style>
+    :root {
+      --bg: #f4f1ec;
+      --bg-soft: #faf8f5;
+      --surface: rgba(255,255,255,0.72);
+      --surface-strong: rgba(255,255,255,0.88);
+      --text: #1f2a34;
+      --muted: #5d6a76;
+      --line: rgba(31,42,52,0.08);
+      --shadow: 0 20px 60px rgba(22, 32, 42, 0.10);
+      --shadow-soft: 0 10px 30px rgba(22, 32, 42, 0.07);
+      --teal: #1f5a63;
+      --teal-soft: rgba(31, 90, 99, 0.10);
+      --navy: #263847;
+      --wine: #7d4a4f;
+      --wine-soft: rgba(125, 74, 79, 0.10);
+      --gold: #8d7456;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(31, 90, 99, 0.10), transparent 24%),
+        radial-gradient(circle at 88% 12%, rgba(125, 74, 79, 0.10), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(141, 116, 86, 0.10), transparent 28%),
+        linear-gradient(180deg, #f7f4ef 0%, #f2efe9 46%, #f6f3ee 100%);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.26;
+      background-image:
+        linear-gradient(rgba(31,42,52,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31,42,52,0.035) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.65), transparent 85%);
+      z-index: 0;
+    }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(244, 241, 236, 0.78);
+      border-bottom: 1px solid rgba(31,42,52,0.06);
+    }
+
+    .topbar-inner {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background:
+        linear-gradient(135deg, rgba(31,90,99,0.95), rgba(38,56,71,0.95));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 20px rgba(31,90,99,0.22);
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      transition: 0.25s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.7);
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .hero {
+      padding: 52px 0 28px;
+    }
+
+    .hero-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.84), rgba(255,255,255,0.60));
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      padding: 42px;
+    }
+
+    .hero-shell::before,
+    .hero-shell::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(12px);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .hero-shell::before {
+      width: 340px;
+      height: 340px;
+      right: -120px;
+      top: -110px;
+      background: radial-gradient(circle, rgba(31,90,99,0.18) 0%, rgba(31,90,99,0.04) 52%, transparent 72%);
+    }
+
+    .hero-shell::after {
+      width: 300px;
+      height: 300px;
+      left: -110px;
+      bottom: -120px;
+      background: radial-gradient(circle, rgba(125,74,79,0.16) 0%, rgba(125,74,79,0.04) 52%, transparent 72%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(31,42,52,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--wine));
+      box-shadow: 0 0 0 6px rgba(31,90,99,0.08);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+      gap: 28px;
+      align-items: end;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      color: var(--navy);
+      max-width: 720px;
+    }
+
+    .hero h1 .accent {
+      background: linear-gradient(135deg, #253949 0%, #1f5a63 55%, #6d4d52 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      margin: 18px 0 0;
+      max-width: 780px;
+      font-size: clamp(18px, 2vw, 23px);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .hero-note {
+      margin-top: 22px;
+      max-width: 760px;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .hero-note strong {
+      color: var(--navy);
+    }
+
+    .pain-panel {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(31,42,52,0.08);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .pain-panel h3 {
+      margin: 0 0 16px;
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .pain-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .pain-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.74));
+      border: 1px solid rgba(31,42,52,0.07);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .pain-item:hover,
+    .card:hover,
+    .metric:hover,
+    .result-item:hover,
+    .work-card:hover,
+    .risk-mini:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(22,32,42,0.10);
+      border-color: rgba(31,90,99,0.18);
+    }
+
+    .pain-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .pain-item:nth-child(2) .pain-num {
+      background: linear-gradient(135deg, var(--navy), var(--wine));
+    }
+
+    .pain-item:nth-child(3) .pain-num {
+      background: linear-gradient(135deg, var(--teal), var(--wine));
+    }
+
+    .pain-item strong {
+      display: block;
+      font-size: 17px;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 22px;
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(26px, 3.2vw, 34px);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.68);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(14px);
+      padding: 28px;
+    }
+
+    .lead {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--navy);
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .lead strong {
+      color: var(--teal);
+    }
+
+    .bullet-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .bullet {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      gap: 14px;
+      align-items: start;
+      color: var(--text);
+    }
+
+    .bullet::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      margin-top: 7px;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      box-shadow: 0 0 0 5px rgba(31,90,99,0.08);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+      transition: .25s ease;
+    }
+
+    .metric .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .metric .value {
+      font-size: clamp(20px, 3vw, 28px);
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .metric .text {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .diagnosis {
+      padding: 30px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+      box-shadow: var(--shadow-soft);
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagnosis::before {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 68%);
+    }
+
+    .diagnosis h3 {
+      margin: 0 0 14px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .diagnosis p {
+      margin: 0;
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.6;
+      letter-spacing: 0;
+      font-weight: 400;
+      max-width: 720px;
+      color: var(--navy);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+      transition: .25s ease;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(31,90,99,0.82), rgba(125,74,79,0.65));
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+      flex-shrink: 0;
+    }
+
+    .card:nth-child(2) .icon { background: linear-gradient(135deg, var(--navy), var(--wine)); }
+    .card:nth-child(3) .icon { background: linear-gradient(135deg, var(--teal), var(--wine)); }
+    .card:nth-child(4) .icon { background: linear-gradient(135deg, #31506a, #5a6e7b); }
+
+    .card-head h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-item {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(31,42,52,0.07);
+    }
+
+    .flow-item b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .flow-item span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .risk-shell {
+      border-radius: 34px;
+      padding: 32px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.68));
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .risk-shell::before {
+      content: "";
+      position: absolute;
+      right: -120px;
+      bottom: -120px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125,74,79,0.14), transparent 70%);
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .risk-chain {
+      display: grid;
+      gap: 14px;
+    }
+
+    .risk-mini {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(125,74,79,0.12);
+      transition: .25s ease;
+    }
+
+    .risk-dot {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--wine), #a1645f);
+      color: white;
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    .risk-mini strong {
+      display: block;
+      color: var(--navy);
+      font-size: 16px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .risk-mini p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .risk-stat {
+      background: rgba(255,255,255,0.82);
+      color: var(--text);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 92px;
+      border: 1px solid rgba(31,42,52,0.07);
+    }
+
+    .risk-stat .cap {
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .risk-stat .big {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .risk-stat .sub {
+      margin: 10px 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .risk-stat ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .risk-stat li {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(31,42,52,0.07);
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .management {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 18px;
+    }
+
+    .work-card {
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: var(--shadow-soft);
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.72);
+      transition: .25s ease;
+    }
+
+    .work-card h3 {
+      margin: 0 0 16px;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+    }
+
+    .checklist li b {
+      color: var(--navy);
+    }
+
+    .table-shell {
+      border-radius: 30px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 18px 20px;
+      background: linear-gradient(180deg, rgba(38,56,71,0.96), rgba(31,90,99,0.92));
+      color: white;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+    }
+
+    tbody td {
+      padding: 18px 20px;
+      border-top: 1px solid rgba(31,42,52,0.07);
+      vertical-align: top;
+      font-size: 15px;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: rgba(255,255,255,0.44);
+    }
+
+    tbody td:first-child {
+      font-weight: 700;
+      color: var(--navy);
+      width: 18%;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .result-item {
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+      box-shadow: var(--shadow-soft);
+      transition: .25s ease;
+      min-height: 170px;
+    }
+
+    .result-item .n {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      color: white;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .result-item strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--navy);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .result-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .cta {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: 34px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.80), rgba(255,255,255,0.62));
+      border: 1px solid rgba(255,255,255,0.74);
+      box-shadow: var(--shadow);
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: auto -60px -60px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(31,90,99,0.16), transparent 70%);
+    }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .cta-main h2,
+    .final h2 {
+      color: var(--navy);
+      max-width: 720px;
+      font-weight: 600;
+    }
+
+    .cta-main p,
+    .final p {
+      margin: 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .role-box {
+      border-radius: 28px;
+      background: rgba(255,255,255,0.78);
+      color: var(--text);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(31,42,52,0.07);
+    }
+
+    .role-box .tiny {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .role-box .role {
+      font-size: clamp(22px, 3vw, 28px);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--navy);
+    }
+
+    .role-box ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .role-box li {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(31,42,52,0.07);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .final {
+      padding-bottom: 58px;
+    }
+
+    .final-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      padding: 38px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.84), rgba(255,255,255,0.60));
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      color: var(--text);
+    }
+
+    .final-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: transparent;
+    }
+
+    .final h2 {
+      color: white;
+      max-width: 720px;
+    }
+
+    .final-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .three-factors {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 24px;
+    }
+
+    .factor {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+    }
+
+    .factor span {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .factor strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+    }
+
+    .contrast {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .contrast-item {
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,42,52,0.07);
+      color: var(--text);
+      margin: 0;
+    }
+
+    .contrast-item b {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .grid-2,
+      .risk-grid,
+      .management,
+      .cta-grid,
+      .final-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .risk-stat {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar {
+        position: relative;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+      }
+
+      .hero-shell,
+      .panel,
+      .diagnosis,
+      .risk-shell,
+      .cta,
+      .final-shell {
+        padding: 24px;
+      }
+
+      .cards,
+      .result-grid,
+      .metric-grid,
+      .three-factors {
+        grid-template-columns: 1fr;
+      }
+
+      .lead {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      .table-shell {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      tbody {
+        display: grid;
+        gap: 14px;
+      }
+
+      tbody tr {
+        background: rgba(255,255,255,0.82);
+        border: 1px solid rgba(255,255,255,0.72);
+        border-radius: 22px;
+        box-shadow: var(--shadow-soft);
+        overflow: hidden;
+      }
+
+      tbody td {
+        border-top: none;
+        padding: 14px 16px;
+        background: transparent !important;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--gold);
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        width: min(calc(100% - 20px), var(--max));
+      }
+
+      section {
+        padding: 24px 0;
+      }
+
+      .hero {
+        padding-top: 24px;
+      }
+
+      .hero-shell,
+      .panel,
+      .diagnosis,
+      .risk-shell,
+      .cta,
+      .final-shell,
+      .work-card,
+      .pain-panel,
+      .card,
+      .risk-stat {
+        border-radius: 24px;
+        padding: 20px;
+      }
+
+      .pain-item,
+      .risk-mini {
+        grid-template-columns: 1fr;
+      }
+
+      .pain-num,
+      .risk-dot,
+      .icon {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  
+
+    /* premium consulting heading style */
+    h1,
+    .section-head h2,
+    .card-head h3,
+    .risk-mini strong,
+    .result-item strong,
+    .final h2 {
+      color: #4a5a63;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* reduce contrast for premium feel */
+    .hero h1 {
+      color: #3f4f58;
+    }
+
+    .hero-note strong,
+    .lead strong {
+      color: #5a6b75;
+      font-weight: 600;
+    }
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>Financial Audit Report</div>
+      </div>
+      <nav class="nav">
+        <a href="#context">Контекст</a>
+        <a href="#summary">Вывод</a>
+        <a href="#problems">Проблемы</a>
+        <a href="#risks">Риски</a>
+        <a href="#actions">Что делать</a>
+        <a href="#final">Итог</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap fade-up">
+      <div class="hero-shell">
+        <div class="eyebrow">Аудит финансовой системы</div>
+        <div class="hero-grid">
+          <div>
+            <h1>Результат <span class="accent">аудита</span><br>финансовой системы</h1>
+            <p class="hero-sub">и предложения по выстраиванию управляемости бизнеса</p>
+            <p class="hero-note">
+              Сейчас бизнес одновременно находится в трех процессах: <strong>рост</strong>, <strong>усложнение управления</strong> и <strong>подготовка к переходу на ОСНО</strong>.
+              <br>
+              При этом финансовая система не соответствует масштабу этих задач.
+            </p>
+          </div>
+          <aside class="pain-panel">
+            <h3>Три боли бизнеса</h3>
+            <div class="pain-list">
+              <div class="pain-item">
+                <div class="pain-num">1</div>
+                <div>
+                  <strong>Рост</strong>
+                  Бизнес ускоряется быстрее, чем усиливается система управления.
+                </div>
+              </div>
+              <div class="pain-item">
+                <div class="pain-num">2</div>
+                <div>
+                  <strong>Переход на ОСНО</strong>
+                  В ноябре появляется новая налоговая нагрузка, к которой модель не подготовлена.
+                </div>
+              </div>
+              <div class="pain-item">
+                <div class="pain-num">3</div>
+                <div>
+                  <strong>Достоверность данных под вопросом</strong>
+                  Расходы бизнеса собираются вручную, нет уверенности в достоверности данных → невозможно опираться на цифры при принятии решений.
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="context" class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">01 / Контекст</div>
+          <h2>Бизнес вошел в фазу, где учета уже недостаточно</h2>
+        </div>
+        <p>На этом этапе нужно не просто фиксировать операции, а управлять деньгами, прибылью и оборотным капиталом. Иначе рост начинает создавать не прибыль, а риски.</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <p class="lead">
+            Бизнес находится в точке активного роста.
+            <br>
+            Увеличивается оборот, расширяется ассортимент, усиливается работа с маркетплейсами и планируется переход на ОСНО.
+            <br>
+            <strong>Это переход на другой уровень управления.</strong>
+          </p>
+          <div class="bullet-stack">
+            <div class="bullet"><div>Если система не усиливается вместе с масштабом бизнеса.
+            <br>
+            Сложность растет быстрее управляемости.</div></div>
+            <div class="bullet"><div>В такой конфигурации собственник вынужден компенсировать слабость системы.
+            <br>
+            Через личное участие.</div></div>
+            <div class="bullet"><div>Это работает на малом масштабе.
+            <br>
+            На этапе роста и перехода на ОСНО становится уязвимостью.</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="label">Фактор 1</div>
+              <div class="value">Рост</div>
+              <div class="text">Оборот и объем операций увеличиваются быстрее, чем система контроля.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Фактор 2</div>
+              <div class="value">ОСНО</div>
+              <div class="text">В ноябре появляется новая налоговая логика, влияющая напрямую на деньги.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Фактор 3</div>
+              <div class="value">Данные</div>
+              <div class="text">Доходы читаются, но расходная часть и закупки не собраны в единой системе.</div>
+            </div>
+            <div class="metric">
+              <div class="label">Итог</div>
+              <div class="value">Риск</div>
+              <div class="text">Нагрузка на бизнес растет быстрее, чем способность принимать точные решения.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary" class="wrap fade-up">
+      <div class="diagnosis">
+        <h3>02 / Вывод</h3>
+        <p>В компании есть учет и аналитика, но нет системы, которая позволяет управлять ростом, налоговой нагрузкой и достоверностью данных. Совокупно это создает риск потери денег при масштабировании.</p>
+      </div>
+    </section>
+
+    <section id="problems" class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">03 / Проблемы</div>
+          <h2>Сейчас бизнес ограничивают не продажи, а архитектура управления</h2>
+        </div>
+        <p>Ниже — четыре блока, которые прямо влияют на деньги, управляемость и качество решений.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card-head">
+            <div class="icon">01</div>
+            <h3>Рост бизнеса не обеспечен системой управления</h3>
+          </div>
+          <div class="flow">
+            <div class="flow-item"><b>Факт</b><span>Увеличиваются обороты и объем закупок, растет количество операций.</span></div>
+            <div class="flow-item"><b>Ограничение</b><span>Отсутствует система планирования и контроля, которая удерживает этот рост.</span></div>
+            <div class="flow-item"><b>Следствие</b><span>Чем быстрее растет бизнес, тем выше риск потери управляемости и ошибок в решениях.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div class="icon">02</div>
+            <h3>Переход на ОСНО не подготовлен</h3>
+          </div>
+          <div class="flow">
+            <div class="flow-item"><b>Факт</b><span>Переход планируется на ноябрь, но НДС в текущую модель не встроен.</span></div>
+            <div class="flow-item"><b>Ограничение</b><span>Нет расчета налоговой нагрузки и сценария, как переход повлияет на деньги.</span></div>
+            <div class="flow-item"><b>Следствие</b><span>В момент перехода появляется новая нагрузка, к которой бизнес не готов организационно и финансово.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div class="icon">03</div>
+            <h3>Достоверность данных под вопросом</h3>
+          </div>
+          <div class="flow">
+            <div class="flow-item"><b>Факт</b><span>Расходы собираются вручную, часть передается коллегами, а закупки — основная статья — находятся вне системы.</span></div>
+            <div class="flow-item"><b>Ограничение</b><span>Нет единого источника правды по затратам, себестоимости и входящему НДС.</span></div>
+            <div class="flow-item"><b>Следствие</b><span>Прибыль и денежный поток считаются с искажением, а решения принимаются на некорректных цифрах.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div class="icon">04</div>
+            <h3>Денежный поток не управляется</h3>
+          </div>
+          <div class="flow">
+            <div class="flow-item"><b>Факт</b><span>ДДС ведется только по факту, платежного календаря нет.</span></div>
+            <div class="flow-item"><b>Ограничение</b><span>Нет прогноза движения денег и синхронизации выплат с закупками и обязательствами.</span></div>
+            <div class="flow-item"><b>Следствие</b><span>Кассовые разрывы становятся неизбежными при росте и проявляются уже тогда, когда на них поздно влиять системно.</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="risks" class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">04 / Риски</div>
+          <h2>Наибольший риск создается не одним фактором, а их сочетанием</h2>
+        </div>
+        <p>Рост увеличивает закупки, ОСНО добавляет НДС, а недостоверные данные не позволяют это корректно рассчитать. В результате бизнес теряет контроль над деньгами.</p>
+      </div>
+      <div class="risk-shell">
+        <div class="risk-grid">
+          <div class="risk-chain">
+            <div class="risk-mini">
+              <div class="risk-dot">1</div>
+              <div>
+                <strong>Рост оборота</strong>
+                <p>Чем выше оборот, тем больше закупки, больше обязательств и выше нагрузка на оборотный капитал.</p>
+              </div>
+            </div>
+            <div class="risk-mini">
+              <div class="risk-dot">2</div>
+              <div>
+                <strong>Переход на ОСНО</strong>
+                <p>С даты перехода появляется НДС, который начинает напрямую влиять на деньги и финансовый результат периода.</p>
+              </div>
+            </div>
+            <div class="risk-mini">
+              <div class="risk-dot">3</div>
+              <div>
+                <strong>Достоверность данных под вопросом</strong>
+                <p>Если расходы собираются вручную и нет уверенности в достоверности данных, невозможно корректно определить вычеты и реальную налоговую нагрузку → решения по налогам и деньгам принимаются на искаженной базе.</p>
+              </div>
+            </div>
+            <div class="risk-mini">
+              <div class="risk-dot">4</div>
+              <div>
+                <strong>Итог</strong>
+                <p>Деньги начинают расходиться быстрее, чем ожидается, и дефицит ликвидности проявляется уже после перехода.</p>
+              </div>
+            </div>
+          </div>
+          <aside class="risk-stat">
+            <p class="cap">Порядок риска</p>
+            <p class="big">~40 млн ₽</p>
+            <p class="sub">НДС начисление при квартальной выручке около 200 млн ₽</p>
+            <ul>
+              <li>При отсутствии точных данных по закупкам невозможно корректно определить сумму вычетов.</li>
+              <li>Ошибка в расчете может стоить десятки миллионов рублей.</li>
+              <li>Это уже не учетная неточность, а риск прямой потери денег при переходе на ОСНО.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">05 / Вывод для управления</div>
+          <h2>Сейчас бизнес умеет продавать, но не управляет последствиями роста</h2>
+        </div>
+        <p>Проблема не в отсутствии выручки. Проблема в том, что нет системы, которая превращает рост в контролируемую прибыль и предсказуемый cash flow.</p>
+      </div>
+      <div class="management">
+        <div class="work-card">
+          <h3>Что уже есть</h3>
+          <ul class="checklist">
+            <li><b>Рост.</b> Бизнес масштабируется и генерирует оборот.</li>
+            <li><b>Аналитика.</b> Есть учетные элементы и управленческие таблицы.</li>
+            <li><b>Команда.</b> Есть вовлеченный финансовый блок.</li>
+          </ul>
+        </div>
+        <div class="work-card">
+          <h3>Чего нет и что это означает</h3>
+          <ul class="checklist">
+            <li><b>Нет достоверной базы данных.</b> Решения принимаются без точной финансовой опоры.</li>
+            <li><b>Нет модели перехода на ОСНО.</b> Налоговая нагрузка не просчитана до уровня денег.</li>
+            <li><b>Нет системы управления cash flow.</b> Риски масштабируются вместе с бизнесом.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="actions" class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">06 / Что необходимо сделать</div>
+          <h2>Нужна не доработка таблиц, а сборка единой финансовой системы</h2>
+        </div>
+        <p>Ниже — базовые направления, без которых переход на ОСНО и дальнейший рост будут происходить на искаженных данных.</p>
+      </div>
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Направление</th>
+              <th>Действие</th>
+              <th>Что это решает</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Направление">Данные</td>
+              <td data-label="Действие">Централизация и контроль расходов</td>
+              <td data-label="Что это решает">Устраняет искажение прибыли и формирует достоверную базу для решений</td>
+            </tr>
+            <tr>
+              <td data-label="Направление">Учет</td>
+              <td data-label="Действие">ОПиУ, ДДС, Баланс как система</td>
+              <td data-label="Что это решает">Дает целостную картину бизнеса: прибыль, деньги и финансовую позицию</td>
+            </tr>
+            <tr>
+              <td data-label="Направление">Деньги</td>
+              <td data-label="Действие">Плановый ДДС и платежный календарь</td>
+              <td data-label="Что это решает">Дает управление ликвидностью и заранее показывает кассовые разрывы</td>
+            </tr>
+            <tr>
+              <td data-label="Направление">Модель</td>
+              <td data-label="Действие">Финансовая модель</td>
+              <td data-label="Что это решает">Позволяет просчитать последствия роста, закупок, налогов и управленческих решений</td>
+            </tr>
+            <tr>
+              <td data-label="Направление">Налоги</td>
+              <td data-label="Действие">Встраивание НДС</td>
+              <td data-label="Что это решает">Делает налоговую нагрузку прогнозируемой и устраняет риск ошибки в расчете<br>Встраивается в ОПиУ и юнит экономику по артикулам</td>
+            </tr>
+            <tr>
+              <td data-label="Направление">ОСНО</td>
+              <td data-label="Действие">Дорожная карта перехода</td>
+              <td data-label="Что это решает">Позволяет пройти переход без потери денег и без ручного антикризисного режима</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wrap fade-up">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">07 / Результат</div>
+          <h2>Что меняется после внедрения системы</h2>
+        </div>
+        <p>Результат — это не просто «красивый учет». Это переход от реактивного управления к модели, где рост становится просчитанным и контролируемым.</p>
+      </div>
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="n">1</div>
+          <strong>Достоверные данные</strong>
+          <p>Появляется единая база, на которую можно опираться в управленческих решениях.</p>
+        </div>
+        <div class="result-item">
+          <div class="n">2</div>
+          <strong>Реальная прибыль</strong>
+          <p>Собственник видит не условный результат, а фактическую экономику бизнеса.</p>
+        </div>
+        <div class="result-item">
+          <div class="n">3</div>
+          <strong>Контроль денег</strong>
+          <p>Cash flow прогнозируется, дефицит ликвидности виден заранее, а не постфактум.</p>
+        </div>
+        <div class="result-item">
+          <div class="n">4</div>
+          <strong>Управляемый НДС</strong>
+          <p>Налоговая нагрузка становится просчитанной частью модели, а не сюрпризом после перехода.</p>
+        </div>
+        <div class="result-item">
+          <div class="n">5</div>
+          <strong>Управляемый рост</strong>
+          <p>Рост перестает усиливать риски и начинает усиливать прибыль и контроль.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap fade-up">
+      <div class="cta">
+        <div class="cta-grid">
+          <div class="cta-main">
+            <div class="section-kicker">08 / Предложение по работе</div>
+            <h2>Формат работы — финансовый директор на внедрение системы</h2>
+            <p>
+              Фокус работы — не сопровождение текущей разрозненной модели, а выстраивание системы, которая дает достоверные данные,
+              управляет деньгами и подготавливает бизнес к переходу на ОСНО без потери ликвидности.
+            </p>
+          </div>
+          <div class="role-box">
+            <div class="tiny">Фокус внедрения</div>
+            <div class="role">CFO-подход</div>
+            <ul>
+              
+              <li>Сбор единой финансовой системы</li>
+              <li>Запуск планирования и Финансовой модели</li>
+              <li>Подготовка бизнеса к ОСНО</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="final" class="final wrap fade-up">
+      <div class="final-shell">
+        <div class="section-kicker">09 / Итог</div>
+        <div class="final-grid">
+          <div>
+            <h2>Основная проблема — не в одном факторе, а в их сочетании</h2>
+            <p>
+              Сейчас одновременно действуют три усиливающих друг друга фактора. По отдельности каждый из них управляем.
+              Вместе — они создают риск потери контроля над деньгами.
+            </p>
+            <div class="three-factors">
+              <div class="factor">
+                <span>Фактор 1</span>
+                <strong>Рост</strong>
+              </div>
+              <div class="factor">
+                <span>Фактор 2</span>
+                <strong>ОСНО</strong>
+              </div>
+              <div class="factor">
+                <span>Фактор 3</span>
+                <strong>Достоверность данных под вопросом</strong>
+              </div>
+            </div>
+          </div>
+          <div class="contrast">
+            <div class="contrast-item"><b>При текущей модели:</b> риски усиливают друг друга и масштабируются вместе с бизнесом.</div>
+            <div class="contrast-item"><b>При системном подходе:</b> рост становится контролируемым, прибыльным и предсказуемым по деньгам.</div>
+            <div class="contrast-item"><b>Управленческий вывод:</b> сейчас нужна не локальная корректировка, а полноценная сборка финансовой системы.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
